@@ -1,5 +1,6 @@
 import * as StatusBar from 'expo-status-bar';
 import * as NavigationBar from 'expo-navigation-bar';
+import * as Brightness from 'expo-brightness';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 
@@ -21,6 +22,13 @@ export default function Page() {
     NavigationBar.setVisibilityAsync('hidden');
     NavigationBar.setBehaviorAsync('overlay-swipe');
 
+    (async () => {
+      const { status } = await Brightness.requestPermissionsAsync();
+      if (status === 'granted') {
+        await Brightness.restoreSystemBrightnessAsync()
+      }
+    })();
+
     async function authenticate() {
       if (!isAuthenticated) {
         const result = await LocalAuthentication.authenticateAsync({
@@ -41,3 +49,12 @@ export default function Page() {
 }
 
 const styles = StyleSheet.create({});
+
+/* TODO
+- supprimer card
+- refaire joli header qui prends moins de place
+- zoom image
+-automatic brightness 100% puis rétablir après
+- bug des refs
+- remettre l'empreinte
+*/

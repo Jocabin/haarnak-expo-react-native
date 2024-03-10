@@ -1,10 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
+import * as Brightness from 'expo-brightness';
 import { router } from 'expo-router';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-import { Alert, View, Image, Dimensions, StyleSheet } from 'react-native';
+import { Alert, View, Image, Dimensions, StyleSheet, Animated } from 'react-native';
 import { Link, useLocalSearchParams } from 'expo-router';
 
 import Button from '../../../src/components/Button';
@@ -16,6 +17,19 @@ export default function Page() {
     const { id } = useLocalSearchParams();
     const cards = JSON.parse(SecureStore.getItem('cards'));
     const [cardInfos, setCardInfos] = useState(cards.find((el) => el.id === id))
+
+    const scale = useRef(new Animated.Value(1)).current
+    const translateX = useRef(new Animated.Value(0)).current
+    const translateY = useRef(new Animated.Value(0)).current
+
+    useEffect(() => {
+        (async () => {
+            const { status } = await Brightness.requestPermissionsAsync();
+            if (status === 'granted') {
+                await Brightness.setBrightnessAsync(1);
+            }
+        })();
+    }, []);
 
     async function pickImage() {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -45,6 +59,9 @@ export default function Page() {
         }
     }
 
+    const onPinchEvent = Animated.event([{ nativeEvent: scale }], { useNativeDriver: true })
+    const onPanEvent = Animated.event([{ nativeEvent: { translateX: translateX, translateY: translateY } }], { useNativeDriver: true })
+
     return (
         <View>
             <Header>
@@ -56,10 +73,8 @@ export default function Page() {
             <View style={styles.container}>
 
                 {
-                    cardInfos.img &&
-                    <Image
-                        source={{ uri: cardInfos.img }}
-                        style={styles.image} />
+                    /* cardInfos.img &&
+                    <ZoomImage onPinchEvent={onPinchEvent} onPanEvent={onPanEvent} /> */
                 }
 
                 <Button onPress={pickImage}>Modifier l'image</Button>
