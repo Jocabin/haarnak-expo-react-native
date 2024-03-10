@@ -2,6 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import * as Brightness from 'expo-brightness';
 import { router } from 'expo-router';
+import { usePreventScreenCapture } from 'expo-screen-capture';
 
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -14,6 +15,8 @@ import Header from '../../../src/components/Header';
 const { width, height } = Dimensions.get('screen');
 
 export default function Page() {
+    usePreventScreenCapture();
+
     const { id } = useLocalSearchParams();
     const cards = JSON.parse(SecureStore.getItem('cards'));
     const [cardInfos, setCardInfos] = useState(cards.find((el) => el.id === id))

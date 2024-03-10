@@ -3,6 +3,7 @@ import * as NavigationBar from 'expo-navigation-bar';
 import * as Brightness from 'expo-brightness';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
+import { usePreventScreenCapture } from 'expo-screen-capture';
 
 import { StyleSheet, Text, SafeAreaView } from 'react-native';
 import { useEffect, useState } from 'react';
@@ -16,6 +17,7 @@ export default function Page() {
   if (!cards) {
     SecureStore.setItem('cards', JSON.stringify([]));
   }
+  usePreventScreenCapture();
   // SecureStore.setItem('cards', '')
 
   useEffect(() => {
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({});
 - supprimer card
 - refaire joli header qui prends moins de place
 - zoom image
--automatic brightness 100% puis rétablir après
+- cancel screen
 - bug des refs
 - remettre l'empreinte
 */

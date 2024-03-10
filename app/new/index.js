@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
+import { usePreventScreenCapture } from 'expo-screen-capture';
 
 import React, { useState } from 'react';
 import 'react-native-get-random-values'
@@ -15,6 +16,8 @@ import Header from '../../src/components/Header';
 const { width, height } = Dimensions.get('screen');
 
 export default function Page() {
+    usePreventScreenCapture();
+
     const cards = JSON.parse(SecureStore.getItem('cards'));
     const [cardInfos, setCardInfos] = useState({
         id: null,
