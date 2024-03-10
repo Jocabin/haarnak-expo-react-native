@@ -15,11 +15,7 @@ const Pagination = ({ data, scrollX, index }) => {
                     extrapolate: 'clamp',
                 });
 
-                const opacity = scrollX.interpolate({
-                    inputRange,
-                    outputRange: [0.2, 1, 0.1],
-                    extrapolate: 'clamp',
-                });
+
 
                 const backgroundColor = scrollX.interpolate({
                     inputRange,
@@ -33,7 +29,6 @@ const Pagination = ({ data, scrollX, index }) => {
                         style={[
                             styles.dot,
                             { width: dotWidth, backgroundColor },
-                            // idx === index && styles.dotActive,
                         ]}
                     />
                 );
@@ -46,8 +41,7 @@ export default Pagination;
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        bottom: 35,
+        padding: 20,
         flexDirection: 'row',
         width: '100%',
         alignItems: 'center',

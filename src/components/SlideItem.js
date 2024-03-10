@@ -1,28 +1,20 @@
-import {
-    Image,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-} from 'react-native';
+import { Image, StyleSheet, View, Dimensions, Pressable, Text } from 'react-native';
 import React from 'react';
+import { Link } from 'expo-router';
 
 const { width, height } = Dimensions.get('screen');
 
 const SlideItem = ({ item }) => {
     return (
         <View style={styles.container}>
-            <Image
-                source={item.img}
-                resizeMode="contain"
-                style={styles.image}
-            />
-
-            <View style={styles.content}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-                <Text style={styles.price}>{item.price}</Text>
-            </View>
+            <Link href={"/card/" + item.id} asChild>
+                <Pressable style={styles.imageWrapper}>
+                    <Image
+                        source={{ uri: item.img }}
+                        style={styles.image}
+                    />
+                </Pressable>
+            </Link>
         </View>
     );
 };
@@ -32,29 +24,25 @@ export default SlideItem;
 const styles = StyleSheet.create({
     container: {
         width,
-        height,
+        padding: 30,
         alignItems: 'center',
+        justifyContent: 'center',
+    },
+    imageWrapper: {
+        width: '100%',
+        height: '100%',
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 10,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        overflow: 'hidden'
     },
     image: {
-        flex: 0.6,
         width: '100%',
-    },
-    content: {
-        flex: 0.4,
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    description: {
-        fontSize: 18,
-        marginVertical: 12,
-        color: '#333',
-    },
-    price: {
-        fontSize: 32,
-        fontWeight: 'bold',
-    },
+        height: '100%',
+        resizeMode: 'cover',
+    }
 });
