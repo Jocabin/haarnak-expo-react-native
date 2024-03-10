@@ -1,10 +1,13 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('screen');
 
-
-const Header = ({ children }) => {
+const Header = ({ border = 1, padding = 16, children }) => {
     return (
-        <View style={styles.header}>
+        <View style={[styles.header, {
+            borderBottomWidth: border ? 1 : 0,
+            padding: padding,
+        }]}>
             {children}
         </View>
     );
@@ -12,14 +15,13 @@ const Header = ({ children }) => {
 
 export default Header;
 
-
-
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'space-between',
         flexDirection: 'row',
         width: '100%',
-        padding: 8,
+        borderColor: '#aaa',
     }
 })

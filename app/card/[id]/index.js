@@ -6,19 +6,18 @@ import { usePreventScreenCapture } from 'expo-screen-capture';
 
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Alert, View, Image, Dimensions, StyleSheet, Animated } from 'react-native';
+import { Alert, View, StyleSheet, Animated } from 'react-native';
 import { Link, useLocalSearchParams } from 'expo-router';
 
-import Button from '../../../src/components/Button';
 import Header from '../../../src/components/Header';
-
-const { width, height } = Dimensions.get('screen');
+import IconButton from '../../../src/components/IconButton';
+import ZoomImage from '../../../src/components/ZoomImage';
 
 export default function Page() {
     usePreventScreenCapture();
 
     const { id } = useLocalSearchParams();
-    const cards = JSON.parse(SecureStore.getItem('cards'));
+    let cards = JSON.parse(SecureStore.getItem('cards'));
     const [cardInfos, setCardInfos] = useState(cards.find((el) => el.id === id))
 
     const scale = useRef(new Animated.Value(1)).current
@@ -62,6 +61,12 @@ export default function Page() {
         }
     }
 
+    async function deleteImage() {
+        cards = cards.filter(el => el.id !== id)
+        await SecureStore.setItem('cards', JSON.stringify(cards));
+        router.replace('/')
+    }
+
     const onPinchEvent = Animated.event([{ nativeEvent: scale }], { useNativeDriver: true })
     const onPanEvent = Animated.event([{ nativeEvent: { translateX: translateX, translateY: translateY } }], { useNativeDriver: true })
 
@@ -69,19 +74,30 @@ export default function Page() {
         <View>
             <Header>
                 <Link href="/" asChild>
-                    <Button>Retour à l'accueil</Button>
+                    <IconButton iconName="arrow-back" text="Retour" />
                 </Link>
+
+                <View style={styles.headerRight}>
+                    <IconButton iconName="trash" text="" onPress={() => {
+                        Alert.alert('Confirmation', 'Voulez-vous supprimer ce document ?', [
+                            {
+                                text: 'Non',
+                                onPress: () => console.log('cancel'),
+                                style: 'cancel',
+                            },
+                            { text: 'Oui', onPress: () => deleteImage() },
+                        ])
+                    }} />
+                    <IconButton iconName="image" text="" onPress={pickImage} />
+                    <IconButton iconName="save" text="" onPress={save} />
+                </View>
             </Header>
 
             <View style={styles.container}>
-
                 {
-                    /* cardInfos.img &&
-                    <ZoomImage onPinchEvent={onPinchEvent} onPanEvent={onPanEvent} /> */
+                    cardInfos.img &&
+                    <ZoomImage imgUrl={cardInfos.img} onPinchEvent={onPinchEvent} onPanEvent={onPanEvent} />
                 }
-
-                <Button onPress={pickImage}>Modifier l'image</Button>
-                <Button onPress={save}>Enregistrer la carte</Button>
             </View>
         </View>
     );
@@ -94,10 +110,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start'
     },
-    image: {
-        width: width - 60,
-        height: '77%',
-        resizeMode: 'cover',
-        backgroundColor: 'lightgray'
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: 16
     }
 })

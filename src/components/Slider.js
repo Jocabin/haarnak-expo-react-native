@@ -40,7 +40,7 @@ const Slider = () => {
 
     return (
         <View style={styles.container}>
-            <Header>
+            <Header border={0} padding={30}>
                 <Link href="/new" asChild>
                     <Button ref="addDocument">Ajouter un document</Button>
                 </Link>
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
         height: height - 100,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        marginTop: 30
     },
     scrollView: {
         flexDirection: 'row'

@@ -19,6 +19,6 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         padding: 12,
         backgroundColor: '#dae8fc',
-        width: width - 60,
+        width: '100%',
     }
 })

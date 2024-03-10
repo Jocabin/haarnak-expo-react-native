@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import 'react-native-get-random-values'
 import { v4 as uuid } from 'uuid'
 
+import IconButton from '../../src/components/IconButton';
 import Button from '../../src/components/Button';
 import Header from '../../src/components/Header';
 
@@ -51,24 +52,25 @@ export default function Page() {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <Header>
                 <Link href="/" asChild>
-                    <Button>Retour à l'accueil</Button>
+                    <IconButton iconName="arrow-back" text="Retour" />
                 </Link>
+
+                <View style={styles.headerRight}>
+                    <IconButton iconName="image" text="" onPress={pickImage} />
+                    <IconButton iconName="save" text="" onPress={save} />
+                </View>
             </Header>
 
-            <View style={styles.container}>
-                <Button onPress={pickImage}>Sélectionner une image</Button>
-
+            <View style={styles.imageWrapper}>
                 {
                     cardInfos.img &&
                     <Image
                         source={{ uri: cardInfos.img }}
                         style={styles.image} />
                 }
-
-                <Button onPress={save}>Enregistrer la carte</Button>
             </View>
         </View>
     );
@@ -77,14 +79,21 @@ export default function Page() {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
-        gap: 20,
-        alignItems: 'center',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-start',
+        height
+    },
+    imageWrapper: {
+        flex: 1
     },
     image: {
-        width: width - 60,
-        height: '70%',
-        resizeMode: 'cover',
-        backgroundColor: 'lightgray'
+        width: '100%',
+        height: (width * 16) / 9,
+        resizeMode: 'contain',
+    },
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: 16
     }
 })

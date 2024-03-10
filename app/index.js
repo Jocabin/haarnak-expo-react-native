@@ -53,10 +53,7 @@ export default function Page() {
 const styles = StyleSheet.create({});
 
 /* TODO
-- supprimer card
-- refaire joli header qui prends moins de place
 - zoom image
-- cancel screen
 - bug des refs
-- remettre l'empreinte
+- remettre l'empreinte et better page quand pas authent
 */
